@@ -126,8 +126,6 @@ AddEventHandler('qb-banking:createNewCard', function()
             currentAccounts[cid].generateNewCard()
         end
     end
-
-    TriggerEvent('qb-log:server:CreateLog', 'banking', 'Banking', 'lightgreen', "**"..GetPlayerName(xPlayer.PlayerData.source) .. " (citizenid: "..xPlayer.identifier.." | id: "..xPlayer.PlayerData.source..")**" .. " created new card")
 end)
 
 RegisterServerEvent('qb-base:itemUsed')
@@ -153,7 +151,7 @@ end)
 function getCharacterName(cid)
     local src = source
     local player = ESX.GetPlayerFromId(src)
-    local name = player.PlayerData.name
+    local name = player.firstname
 end
 
 RegisterServerEvent('qb-banking:initiateTransfer')
@@ -256,10 +254,10 @@ ESX.RegisterServerCallback('qb-banking:getBankingInformation', function(source, 
     while xPlayer == nil do Wait(0) end
         if (xPlayer) then
             local banking = {
-                    ['name'] = xPlayer.PlayerData.charinfo.firstname .. ' ' .. xPlayer.PlayerData.charinfo.lastname,
-                    ['bankbalance'] = '$'.. format_int(xPlayer.PlayerData.money['bank']),
-                    ['cash'] = '$'.. format_int(xPlayer.PlayerData.money['cash']),
-                    ['accountinfo'] = xPlayer.PlayerData.charinfo.account,
+                    ['name'] = xPlayer.firstname .. ' ' .. xPlayer.lastname,
+                    ['bankbalance'] = '$'.. format_int(xPlayer.getAccounts('bank'),
+                    ['cash'] = '$'.. format_int(xPlayer.getMoney()),
+                    ['accountinfo'] = xPlayer.account,
                 }
                 
                 if savingsAccounts[xPlayer.identifier] then
@@ -407,7 +405,7 @@ AddEventHandler('qb-banking:createSavingsAccount', function()
     repeat Wait(0) until success ~= nil
     TriggerClientEvent('qb-banking:openBankScreen', src)
     TriggerClientEvent('qb-banking:successAlert', src, 'You have successfully opened a savings account.')
-    TriggerEvent('qb-log:server:CreateLog', 'banking', 'Banking', "lightgreen", "**"..GetPlayerName(xPlayer.source) .. " (citizenid: "..xPlayer.identifier.." | id: "..xPlayer.PlayerData.source..")** opened a savings account")
+    TriggerEvent('qb-log:server:CreateLog', 'banking', 'Banking', "lightgreen", "**"..GetPlayerName(xPlayer.source) .. " (citizenid: "..xPlayer.identifier.." | id: "..xPlayer.source..")** opened a savings account")
 end)
 
 RegisterNetEvent("payanimation")
